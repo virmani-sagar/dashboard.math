@@ -20,16 +20,35 @@
       "grade": "Grade 6",
       "curriculum": "US Common Core Mathematics",
 
-      "schedule": [
-        {
-          "date": "2026-11-16",
-          "start": "05:00",
-          "end": "06:00",
-          "timezone": "EST",
-          "title": "Grade 6 Mathematics",
-          "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
-        }
-      ],
+"schedule": [
+  {
+    "day": "Monday",
+    "start": "05:00",
+    "end": "06:00",
+    "timezone": "EST",
+    "timezoneLabel": "3:30 PM - 4:30 PM IST",
+    "title": "Grade 6 Mathematics",
+    "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+  },
+  {
+    "day": "Tuesday",
+    "start": "05:00",
+    "end": "06:00",
+    "timezone": "EST",
+    "timezoneLabel": "3:30 PM - 4:30 PM IST",
+    "title": "Grade 6 Mathematics",
+    "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+  },
+  {
+    "day": "Wednesday",
+    "start": "05:00",
+    "end": "06:00",
+    "timezone": "EST",
+    "timezoneLabel": "3:30 PM - 4:30 PM IST",
+    "title": "Grade 6 Mathematics",
+    "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+  }
+],
 
       "assignments": [
         {
@@ -50,17 +69,34 @@
       "curriculum": "US Common Core Mathematics",
 
       "schedule": [
-
-        {
-          "date": "2026-11-16",
-          "start": "05:00",
-          "end": "06:00",
-          "timezone": "EST",
-          "title": "Grade 8 Mathematics",
-          "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
-        }
-
-        ],
+  {
+    "day": "Monday",
+    "start": "06:00",
+    "end": "07:00",
+    "timezone": "EST",
+    "timezoneLabel": "4:30 PM - 5:30 PM IST",
+    "title": "Grade 8 Mathematics",
+    "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+  },
+  {
+    "day": "Wednesday",
+    "start": "06:00",
+    "end": "07:00",
+    "timezone": "EST",
+    "timezoneLabel": "4:30 PM - 5:30 PM IST",
+    "title": "Grade 8 Mathematics",
+    "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+  },
+  {
+    "day": "Thursday",
+    "start": "05:00",
+    "end": "06:00",
+    "timezone": "EST",
+    "timezoneLabel": "3:30 PM - 4:30 PM IST",
+    "title": "Grade 8 Mathematics",
+    "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+  }
+],
 
       "assignments": [
                     {
