@@ -10,16 +10,16 @@
 
 <style>
 :root {
-  --primary: #2563eb;
-  --primary-dark: #172554;
-  --accent: #0ea5e9;
-  --background: #f4f7fc;
-  --surface: #ffffff;
-  --text: #172554;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --success: #16845b;
-  --shadow: 0 8px 28px rgba(23,37,84,.07);
+  --primary:#2563eb;
+  --primary-dark:#172554;
+  --accent:#0ea5e9;
+  --background:#f4f7fc;
+  --surface:#ffffff;
+  --text:#172554;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --success:#16845b;
+  --shadow:0 8px 28px rgba(23,37,84,.07);
 }
 
 * { box-sizing:border-box; }
@@ -32,7 +32,6 @@ body {
 }
 
 .hidden { display:none!important; }
-
 button,input { font:inherit; }
 
 .topbar {
@@ -51,16 +50,6 @@ button,input { font:inherit; }
   gap:11px;
   font-weight:800;
   font-size:19px;
-}
-
-.brand-icon {
-  background:var(--primary);
-  width:38px;
-  height:38px;
-  border-radius:10px;
-  display:grid;
-  place-items:center;
-  font-size:20px;
 }
 
 .brand small {
@@ -393,20 +382,40 @@ button,input { font:inherit; }
   background:#eff6ff;
 }
 
-.day.has-class {
+/* Upcoming classes: BLUE */
+.day.upcoming-class {
   background:#dbeafe;
   border-color:#93c5fd;
   color:#1e40af;
   font-weight:bold;
+  cursor:pointer;
+}
+
+/* Elapsed classes: GREEN */
+.day.elapsed-class {
+  background:#dcfce7;
+  border-color:#86efac;
+  color:#166534;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .day .dot {
   display:block;
   width:6px;
   height:6px;
-  background:var(--primary);
   border-radius:50%;
   margin-top:7px;
+  background:#2563eb;
+}
+
+.day.elapsed-class .dot {
+  background:#16a34a;
+}
+
+.day.selected {
+  outline:2px solid var(--primary);
+  outline-offset:1px;
 }
 
 .calendar-nav {
@@ -427,6 +436,17 @@ button,input { font:inherit; }
   min-width:100px;
   text-align:center;
   font-size:12px;
+}
+
+.calendar-message {
+  margin-top:14px;
+  padding:12px;
+  background:#f8fafc;
+  border:1px solid var(--border);
+  border-radius:9px;
+  font-size:12px;
+  line-height:1.6;
+  color:var(--muted);
 }
 
 .assignment {
@@ -522,7 +542,6 @@ button,input { font:inherit; }
 
 <header class="topbar">
   <div class="brand">
-    
     <div>
       Math<span>.</span>
       <small>POWERED BY openEd Labs</small>
@@ -532,8 +551,6 @@ button,input { font:inherit; }
     Programme Details ↗
   </a>
 </header>
-
-<!-- LOGIN -->
 
 <section id="loginView" class="login-section">
   <div class="login-card">
@@ -567,8 +584,6 @@ button,input { font:inherit; }
   </div>
 </section>
 
-<!-- STUDENT DASHBOARD -->
-
 <main id="dashboardView" class="container hidden">
 
   <div class="header">
@@ -584,9 +599,7 @@ button,input { font:inherit; }
         <strong id="studentName">Student</strong>
         <small id="studentGrade">Grade 6</small>
       </div>
-      <button class="btn btn-secondary" id="logoutBtn">
-        Logout
-      </button>
+      <button class="btn btn-secondary" id="logoutBtn">Logout</button>
     </div>
   </div>
 
@@ -625,9 +638,7 @@ button,input { font:inherit; }
       <div class="join-panel">
         <div>
           <h3 id="nextClassTitle">Schedule pending</h3>
-          <p id="nextClassInfo">
-            Your next class details will appear here.
-          </p>
+          <p id="nextClassInfo">Your next class details will appear here.</p>
         </div>
 
         <a id="joinBtn" class="btn btn-primary"
@@ -659,7 +670,19 @@ button,input { font:inherit; }
       </div>
 
       <div id="calendar" class="calendar"></div>
-      <p class="muted">Highlighted dates indicate scheduled classes.</p>
+
+      <div style="display:flex;gap:15px;flex-wrap:wrap;margin-top:14px;">
+        <span class="muted">
+          <span style="color:#2563eb">●</span> Upcoming
+        </span>
+        <span class="muted">
+          <span style="color:#16a34a">●</span> Class is over
+        </span>
+      </div>
+
+      <div id="calendarMessage" class="calendar-message">
+        Select a highlighted date to view class details.
+      </div>
     </section>
 
     <section class="card col-8">
@@ -669,9 +692,7 @@ button,input { font:inherit; }
       </div>
 
       <div id="assignmentList">
-        <div class="empty">
-          No assignments uploaded yet.
-        </div>
+        <div class="empty">No assignments uploaded yet.</div>
       </div>
     </section>
 
@@ -717,9 +738,7 @@ button,input { font:inherit; }
   <div class="footer">
     © <span id="year"></span>
     Math · Powered by openEd Labs ·
-    <a href="https://math.eduspace.work/proposal.html">
-      Programme Proposal
-    </a>
+    <a href="https://math.eduspace.work/proposal.html">Programme Proposal</a>
   </div>
 
 </main>
@@ -728,6 +747,7 @@ button,input { font:inherit; }
 let CONFIG = null;
 let currentStudent = null;
 let calendarMonth = new Date();
+let selectedCalendarDate = null;
 
 const $ = id => document.getElementById(id);
 
@@ -756,7 +776,7 @@ function formatDate(value) {
 }
 
 async function loadConfig() {
-  const response = await fetch("dashboard-data.json", {
+  const response = await fetch("./dashboard-data.json", {
     cache:"no-store"
   });
 
@@ -786,8 +806,7 @@ $("loginForm").addEventListener("submit", async e => {
     );
 
     if (!student) {
-      $("loginError").textContent =
-        "Incorrect username or password.";
+      $("loginError").textContent = "Incorrect username or password.";
       return;
     }
 
@@ -800,8 +819,9 @@ $("loginForm").addEventListener("submit", async e => {
     renderDashboard();
 
   } catch (error) {
+    console.error(error);
     $("loginError").textContent =
-      "Unable to load dashboard-data.json. Please check your files.";
+      "Unable to load dashboard-data.json. Check the JSON file and its location.";
   } finally {
     button.disabled = false;
   }
@@ -815,23 +835,31 @@ $("logoutBtn").addEventListener("click", () => {
 });
 
 $("prevMonth").addEventListener("click", () => {
-  calendarMonth.setMonth(calendarMonth.getMonth()-1);
+  calendarMonth = new Date(
+    calendarMonth.getFullYear(),
+    calendarMonth.getMonth()-1,
+    1
+  );
   renderCalendar();
 });
 
 $("nextMonth").addEventListener("click", () => {
-  calendarMonth.setMonth(calendarMonth.getMonth()+1);
+  calendarMonth = new Date(
+    calendarMonth.getFullYear(),
+    calendarMonth.getMonth()+1,
+    1
+  );
   renderCalendar();
 });
 
 function renderDashboard() {
   $("welcomeTitle").textContent =
-    `Hello, ${currentStudent.name.split(" ")[0]}!`;
+    `Hello, ${currentStudent.username}!`;
 
   $("welcomeSubtitle").textContent =
     `Your ${currentStudent.grade} mathematics learning space.`;
 
-  $("studentName").textContent = currentStudent.name;
+  $("studentName").textContent = currentStudent.username;
   $("studentGrade").textContent =
     `${currentStudent.grade} · ${currentStudent.curriculum}`;
 
@@ -843,71 +871,176 @@ function renderDashboard() {
   $("timezoneLabel").textContent =
     CONFIG.site.timezoneLabel || "";
 
+  selectedCalendarDate = null;
+
   renderClasses();
   renderAssignments();
   renderCalendar();
   renderAvailability();
 }
 
+/* TIMEZONE-AWARE CLASS DATE AND TIME */
+
+function getClassDateTime(s) {
+  const timezone = CONFIG.site.timezone || "America/New_York";
+
+  const dateTime = new Date(`${s.date}T${s.start || "00:00"}:00`);
+
+  // Interpret schedule clock times in the configured timezone.
+  const [year, month, day] = s.date.split("-").map(Number);
+  const [hour, minute] = (s.start || "00:00").split(":").map(Number);
+
+  const target = Date.UTC(year, month - 1, day, hour, minute);
+
+  let guess = target;
+
+  for (let i = 0; i < 3; i++) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(new Date(guess));
+
+    const values = {};
+    parts.forEach(p => values[p.type] = p.value);
+
+    const represented = Date.UTC(
+      Number(values.year),
+      Number(values.month) - 1,
+      Number(values.day),
+      Number(values.hour),
+      Number(values.minute)
+    );
+
+    guess += target - represented;
+  }
+
+  return new Date(guess);
+}
+
+function getClassEndDateTime(s) {
+  const endSchedule = {
+    ...s,
+    start: s.end || s.start
+  };
+
+  return getClassDateTime(endSchedule);
+}
+
+function getClassStatus(s) {
+  return getClassEndDateTime(s) <= new Date()
+    ? "elapsed"
+    : "upcoming";
+}
+
+/* GENERATE RECURRING CLASSES */
+
+function getOccurrences(startDate, endDate) {
+  const schedules = currentStudent.schedule || [];
+  const occurrences = [];
+
+  const weekdays = [
+    "Sunday", "Monday", "Tuesday", "Wednesday",
+    "Thursday", "Friday", "Saturday"
+  ];
+
+  const cursor = new Date(startDate);
+  cursor.setHours(12,0,0,0);
+
+  const last = new Date(endDate);
+  last.setHours(12,0,0,0);
+
+  while (cursor <= last) {
+    const key = dateKey(cursor);
+    const dayName = weekdays[cursor.getDay()];
+
+    schedules.forEach(schedule => {
+      if (schedule.date) {
+        if (schedule.date === key) {
+          occurrences.push({...schedule, date:key});
+        }
+      } else if (
+        schedule.day &&
+        schedule.day.toLowerCase() === dayName.toLowerCase()
+      ) {
+        occurrences.push({...schedule, date:key});
+      }
+    });
+
+    cursor.setDate(cursor.getDate()+1);
+  }
+
+  return occurrences.sort((a,b) =>
+    getClassDateTime(a) - getClassDateTime(b)
+  );
+}
+
+function getMonthOccurrences() {
+  const year = calendarMonth.getFullYear();
+  const month = calendarMonth.getMonth();
+
+  return getOccurrences(
+    new Date(year,month,1),
+    new Date(year,month+1,0)
+  );
+}
+
 function getUpcoming() {
   const now = new Date();
 
-  return (currentStudent.schedule || [])
-    .filter(s => s.date)
-    .filter(s => new Date(`${s.date}T${s.start || "00:00"}:00`) > now)
-    .sort((a,b) =>
-      `${a.date}T${a.start || "00:00"}`.localeCompare(
-        `${b.date}T${b.start || "00:00"}`
-      )
-    );
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const end = new Date(today);
+  end.setDate(end.getDate()+60);
+
+  return getOccurrences(today,end)
+    .filter(s => getClassEndDateTime(s) > now);
 }
+
+/* UPCOMING CLASS DISPLAY */
 
 function renderClasses() {
   const upcoming = getUpcoming();
 
   $("upcomingCount").textContent =
-    `${upcoming.length} scheduled`;
+    `${upcoming.length} upcoming`;
 
   if (!upcoming.length) {
     $("upcomingList").innerHTML =
       '<div class="empty">No upcoming classes scheduled.</div>';
 
-    $("nextClassTitle").textContent =
-      "Your schedule is being finalised";
-
+    $("nextClassTitle").textContent = "No upcoming classes";
     $("nextClassInfo").textContent =
-      "Confirmed class dates and timings will appear here.";
+      "Check your regular weekly schedule.";
 
     $("joinBtn").href = "#";
-    $("joinBtn").onclick = e => {
-      e.preventDefault();
-      alert("Your Google Meet link will be added soon.");
-    };
+    $("joinBtn").onclick = e => e.preventDefault();
     return;
   }
 
-  $("upcomingList").innerHTML = upcoming.slice(0,7).map(s => {
-    const date = new Date(s.date+"T12:00:00");
-
-    return `
-      <div class="session">
-        <div class="datebox">
-          <strong>${date.getDate()}</strong>
-          <small>${date.toLocaleDateString("en-US",{month:"short"})}</small>
-        </div>
-
-        <div class="session-info">
-          <strong>${safe(s.title || "Mathematics Class")}</strong>
-          <small>
-            ${safe(formatDate(s.date))}
-            · ${safe(s.start || "Time TBC")}
-            – ${safe(s.end || "")}
-            ${safe(s.timezone || "")}
-          </small>
-        </div>
+  $("upcomingList").innerHTML = upcoming.slice(0,7).map(s => `
+    <div class="session">
+      <div class="datebox">
+        <strong>${new Date(s.date+"T12:00:00").getDate()}</strong>
+        <small>${new Date(s.date+"T12:00:00")
+          .toLocaleDateString("en-US",{month:"short"})}</small>
       </div>
-    `;
-  }).join("");
+
+      <div class="session-info">
+        <strong>${safe(s.title || "Mathematics Class")}</strong>
+        <small>
+          ${safe(formatDate(s.date))}
+          · ${safe(s.start || "")} – ${safe(s.end || "")}
+          ${safe(s.timezoneLabel || s.timezone || "")}
+        </small>
+      </div>
+    </div>
+  `).join("");
 
   const next = upcoming[0];
   const link = next.meetLink || CONFIG.defaultMeetLink || "";
@@ -916,7 +1049,7 @@ function renderClasses() {
     next.title || `${currentStudent.grade} Mathematics`;
 
   $("nextClassInfo").textContent =
-    `${formatDate(next.date)} · ${next.start || "Time TBC"} – ${next.end || ""} ${next.timezone || ""}`;
+    `${formatDate(next.date)} · ${next.start || ""} – ${next.end || ""} ${next.timezone || ""} · ${next.timezoneLabel || ""}`;
 
   $("joinBtn").href = link || "#";
 
@@ -928,47 +1061,14 @@ function renderClasses() {
   };
 }
 
-function renderAssignments() {
-  const files = currentStudent.assignments || [];
-
-  $("assignmentCount").textContent =
-    `${files.length} files`;
-
-  if (!files.length) {
-    $("assignmentList").innerHTML =
-      '<div class="empty">No assignments uploaded yet.</div>';
-    return;
-  }
-
-  $("assignmentList").innerHTML = files.map(file => `
-    <div class="assignment">
-      <div class="file-icon">
-        ${safe(file.type || "FILE")}
-      </div>
-
-      <div class="file-info">
-        <strong>${safe(file.title)}</strong>
-        <small>
-          ${safe(file.description || "Learning resource")}
-          ${file.date ? " · " + safe(file.date) : ""}
-        </small>
-      </div>
-
-      <a class="download"
-         href="${safe(file.file)}"
-         download>
-         Download ↓
-      </a>
-    </div>
-  `).join("");
-}
+/* CALENDAR */
 
 function renderCalendar() {
   const year = calendarMonth.getFullYear();
   const month = calendarMonth.getMonth();
 
   $("monthLabel").textContent =
-    calendarMonth.toLocaleDateString("en-US",{
+    calendarMonth.toLocaleDateString("en-US", {
       month:"short",
       year:"numeric"
     });
@@ -978,9 +1078,13 @@ function renderCalendar() {
   const total = new Date(year,month+1,0).getDate();
   const previousTotal = new Date(year,month,0).getDate();
 
-  const classDates = new Set(
-    (currentStudent.schedule || []).map(s => s.date)
-  );
+  const occurrences = getMonthOccurrences();
+  const classMap = {};
+
+  occurrences.forEach(s => {
+    if (!classMap[s.date]) classMap[s.date] = [];
+    classMap[s.date].push(s);
+  });
 
   const today = dateKey(new Date());
 
@@ -989,7 +1093,7 @@ function renderCalendar() {
     .join("");
 
   for (let i=0;i<42;i++) {
-    let day, date, other = false;
+    let day,date,other=false;
 
     if (i < start) {
       day = previousTotal-start+i+1;
@@ -1005,21 +1109,121 @@ function renderCalendar() {
     }
 
     const key = dateKey(date);
-    const hasClass = classDates.has(key);
+    const classes = classMap[key] || [];
+
+    const hasElapsed = classes.some(s => getClassStatus(s)==="elapsed");
+    const hasUpcoming = classes.some(s => getClassStatus(s)==="upcoming");
+
+    // If multiple classes occur on the same date,
+    // show green only when all of them have elapsed.
+    const allElapsed = classes.length > 0 && !hasUpcoming;
+
+    const statusClass = allElapsed
+      ? "elapsed-class"
+      : hasUpcoming
+        ? "upcoming-class"
+        : "";
 
     output += `
-      <div class="day
-        ${other ? "other" : ""}
-        ${key===today ? "today" : ""}
-        ${hasClass ? "has-class" : ""}">
+      <div
+        class="day
+          ${other ? "other" : ""}
+          ${key===today ? "today" : ""}
+          ${statusClass}
+          ${selectedCalendarDate===key ? "selected" : ""}"
+        ${classes.length ? `data-date="${key}"` : ""}
+        title="${classes.length
+          ? classes.map(s =>
+              `${s.title || "Mathematics"} · ${s.start}-${s.end}`
+            ).join(" | ")
+          : ""}">
+
         ${day}
-        ${hasClass ? '<span class="dot"></span>' : ""}
+        ${classes.length ? '<span class="dot"></span>' : ""}
       </div>
     `;
   }
 
   $("calendar").innerHTML = output;
+
+  $("calendar").querySelectorAll("[data-date]").forEach(cell => {
+    cell.addEventListener("click", () => {
+      selectedCalendarDate = cell.dataset.date;
+      showCalendarMessage(selectedCalendarDate);
+      renderCalendar();
+    });
+  });
+
+  if (selectedCalendarDate) {
+    showCalendarMessage(selectedCalendarDate);
+  }
 }
+
+function showCalendarMessage(key) {
+  const classes = getMonthOccurrences()
+    .filter(s => s.date === key);
+
+  if (!classes.length) {
+    $("calendarMessage").textContent =
+      "No class scheduled on this date.";
+    return;
+  }
+
+  const allElapsed = classes.every(
+    s => getClassStatus(s) === "elapsed"
+  );
+
+  if (allElapsed) {
+    $("calendarMessage").innerHTML =
+      '<strong style="color:#16845b">Class is over.</strong>';
+    return;
+  }
+
+  $("calendarMessage").innerHTML = classes.map(s => `
+    <div style="margin-bottom:5px;">
+      <strong>${safe(s.title || "Mathematics Class")}</strong><br>
+      ${safe(s.start)} – ${safe(s.end)}
+      ${safe(s.timezone || "")}
+      ${safe(s.timezoneLabel || "")}
+    </div>
+  `).join("");
+}
+
+/* ASSIGNMENTS */
+
+function renderAssignments() {
+  const files = currentStudent.assignments || [];
+
+  $("assignmentCount").textContent = `${files.length} files`;
+
+  if (!files.length) {
+    $("assignmentList").innerHTML =
+      '<div class="empty">No assignments uploaded yet.</div>';
+    return;
+  }
+
+  $("assignmentList").innerHTML = files.map(file => `
+    <div class="assignment">
+      <div class="file-icon">${safe(file.type || "FILE")}</div>
+
+      <div class="file-info">
+        <strong>${safe(file.title)}</strong>
+        <small>
+          ${safe(file.description || "Learning resource")}
+          ${file.date ? " · " + safe(file.date) : ""}
+        </small>
+      </div>
+
+      <a class="download"
+         href="${safe(file.file)}"
+         download>
+        Download ↓
+      </a>
+    </div>
+  `).join("");
+}
+
+/* AVAILABILITY */
 
 function renderAvailability() {
   $("availability").innerHTML =
