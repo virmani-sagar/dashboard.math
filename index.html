@@ -1,0 +1,1037 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#172554">
+<meta name="description" content="Math Student Dashboard powered by openEd Labs. Access your mathematics classes, schedules and assignments.">
+<title>Math Student Dashboard | openEd Labs</title>
+
+<style>
+:root {
+  --primary: #2563eb;
+  --primary-dark: #172554;
+  --accent: #0ea5e9;
+  --background: #f4f7fc;
+  --surface: #ffffff;
+  --text: #172554;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --success: #16845b;
+  --shadow: 0 8px 28px rgba(23,37,84,.07);
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--background);
+  color:var(--text);
+}
+
+.hidden { display:none!important; }
+
+button,input { font:inherit; }
+
+.topbar {
+  background:var(--primary-dark);
+  color:white;
+  padding:15px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:800;
+  font-size:19px;
+}
+
+.brand-icon {
+  background:var(--primary);
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+}
+
+.brand small {
+  display:block;
+  font-size:10px;
+  color:#cbd5e1;
+  letter-spacing:1px;
+  margin-top:3px;
+}
+
+.topbar a {
+  color:white;
+  text-decoration:none;
+  font-size:13px;
+}
+
+.container {
+  max-width:1180px;
+  margin:auto;
+  padding:30px 20px;
+}
+
+.login-section {
+  min-height:85vh;
+  display:grid;
+  place-items:center;
+  padding:25px;
+}
+
+.login-card {
+  width:100%;
+  max-width:430px;
+  padding:35px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+
+.login-card h1 { margin:10px 0; }
+
+.subtitle {
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+
+.eyebrow {
+  color:var(--primary);
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+
+.field { margin-top:19px; }
+
+.field label {
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+.field input {
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  outline:none;
+}
+
+.field input:focus {
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px #dbeafe;
+}
+
+.btn {
+  padding:12px 17px;
+  border:0;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+}
+
+.btn-primary {
+  background:var(--primary);
+  color:white;
+}
+
+.btn-secondary {
+  background:#eff6ff;
+  color:var(--primary-dark);
+}
+
+.btn-block {
+  width:100%;
+  margin-top:20px;
+}
+
+.error {
+  color:#dc2626;
+  font-size:13px;
+  margin-top:12px;
+}
+
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.header h1 {
+  margin:7px 0;
+  font-size:29px;
+}
+
+.header p {
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.profile {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px;
+}
+
+.avatar {
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#dbeafe;
+  color:var(--primary);
+  font-weight:bold;
+}
+
+.profile small {
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:17px;
+}
+
+.card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.col-8 { grid-column:span 8; }
+.col-4 { grid-column:span 4; }
+.col-12 { grid-column:span 12; }
+
+.card h2 {
+  font-size:16px;
+  margin:0;
+}
+
+.card-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:17px;
+}
+
+.muted {
+  color:var(--muted);
+  font-size:12px;
+}
+
+.notice {
+  background:#eff6ff;
+  border:1px solid #bfdbfe;
+  color:#1e40af;
+  padding:13px;
+  border-radius:11px;
+  font-size:12px;
+  line-height:1.6;
+  margin-bottom:18px;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.stat {
+  background:white;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:13px;
+}
+
+.stat small {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.stat strong {
+  display:block;
+  font-size:25px;
+  margin:7px 0;
+}
+
+.join-panel {
+  background:var(--primary-dark);
+  color:white;
+  border-radius:13px;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.join-panel h3 { margin:0 0 7px; }
+
+.join-panel p {
+  color:#cbd5e1;
+  font-size:12px;
+  line-height:1.6;
+  margin:0;
+}
+
+.join-panel .btn { flex-shrink:0; }
+
+.empty {
+  border:1px dashed var(--border);
+  padding:23px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  border-radius:11px;
+  line-height:1.6;
+}
+
+.session {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.session:last-child { border-bottom:0; }
+
+.datebox {
+  min-width:45px;
+  height:48px;
+  display:grid;
+  place-content:center;
+  text-align:center;
+  background:#eff6ff;
+  border-radius:9px;
+}
+
+.datebox strong { font-size:18px; }
+
+.datebox small {
+  font-size:10px;
+  color:var(--muted);
+}
+
+.session-info { flex:1; }
+
+.session-info strong {
+  display:block;
+  font-size:13px;
+}
+
+.session-info small {
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+}
+
+.calendar {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+
+.day-name {
+  text-align:center;
+  font-size:10px;
+  font-weight:bold;
+  color:var(--muted);
+  padding:7px 0;
+}
+
+.day {
+  min-height:58px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:7px 5px;
+  font-size:11px;
+}
+
+.day.other { opacity:.35; }
+
+.day.today {
+  border-color:var(--primary);
+  background:#eff6ff;
+}
+
+.day.has-class {
+  background:#dbeafe;
+  border-color:#93c5fd;
+  color:#1e40af;
+  font-weight:bold;
+}
+
+.day .dot {
+  display:block;
+  width:6px;
+  height:6px;
+  background:var(--primary);
+  border-radius:50%;
+  margin-top:7px;
+}
+
+.calendar-nav {
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.calendar-nav button {
+  border:1px solid var(--border);
+  background:white;
+  padding:5px 10px;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.calendar-nav strong {
+  min-width:100px;
+  text-align:center;
+  font-size:12px;
+}
+
+.assignment {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.assignment:last-child { border-bottom:0; }
+
+.file-icon {
+  background:#e0f2fe;
+  color:#075985;
+  border-radius:9px;
+  padding:12px;
+  font-weight:bold;
+  font-size:11px;
+}
+
+.file-info { flex:1; }
+
+.file-info strong {
+  font-size:13px;
+  display:block;
+}
+
+.file-info small {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.download {
+  color:var(--primary);
+  text-decoration:none;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.slot {
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  font-size:12px;
+}
+
+.slot small {
+  display:block;
+  color:var(--success);
+  margin-top:5px;
+}
+
+.availability {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+
+.footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  padding:25px 10px;
+}
+
+.footer a {
+  color:var(--primary);
+  text-decoration:none;
+}
+
+@media(max-width:800px) {
+  .col-8,.col-4 { grid-column:span 12; }
+  .header { align-items:flex-start; flex-direction:column; }
+}
+
+@media(max-width:480px) {
+  .container { padding:20px 12px; }
+  .card { padding:15px; }
+  .stats { gap:7px; }
+  .stat { padding:11px; }
+  .stat strong { font-size:20px; }
+  .join-panel { flex-direction:column; align-items:stretch; }
+  .join-panel .btn { width:100%; }
+  .availability { grid-template-columns:1fr; }
+  .day { min-height:48px; padding:5px 3px; }
+  .login-card { padding:24px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    
+    <div>
+      Math<span>.</span>
+      <small>POWERED BY openEd Labs</small>
+    </div>
+  </div>
+  <a href="https://math.eduspace.work/proposal.html">
+    Programme Details ↗
+  </a>
+</header>
+
+<!-- LOGIN -->
+
+<section id="loginView" class="login-section">
+  <div class="login-card">
+    <div class="eyebrow">Student Portal</div>
+    <h1>Welcome back!</h1>
+    <p class="subtitle">
+      Sign in to access your mathematics classes,
+      learning schedule and assignments.
+    </p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label>Username</label>
+        <input id="username" autocomplete="username"
+               placeholder="Enter username" required>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="password" type="password"
+               autocomplete="current-password"
+               placeholder="Enter password" required>
+      </div>
+
+      <button class="btn btn-primary btn-block" type="submit">
+        Sign In →
+      </button>
+
+      <div id="loginError" class="error"></div>
+    </form>
+  </div>
+</section>
+
+<!-- STUDENT DASHBOARD -->
+
+<main id="dashboardView" class="container hidden">
+
+  <div class="header">
+    <div>
+      <div class="eyebrow">Student Learning Dashboard</div>
+      <h1 id="welcomeTitle">Welcome!</h1>
+      <p id="welcomeSubtitle">Your learning space.</p>
+    </div>
+
+    <div class="profile">
+      <div class="avatar" id="avatar">G6</div>
+      <div>
+        <strong id="studentName">Student</strong>
+        <small id="studentGrade">Grade 6</small>
+      </div>
+      <button class="btn btn-secondary" id="logoutBtn">
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong>Programme Information:</strong>
+    Three one-to-one mathematics sessions per week,
+    with a maximum of 14 classes per month.
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <small>Classes per week</small>
+      <strong>3</strong>
+      <small>Individual sessions</small>
+    </div>
+    <div class="stat">
+      <small>Monthly class limit</small>
+      <strong>14</strong>
+      <small>Per student</small>
+    </div>
+    <div class="stat">
+      <small>Curriculum</small>
+      <strong style="font-size:19px">US CC</strong>
+      <small>Common Core Mathematics</small>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <section class="card col-8">
+      <div class="card-heading">
+        <h2>Next Online Class</h2>
+        <span class="muted">Google Meet</span>
+      </div>
+
+      <div class="join-panel">
+        <div>
+          <h3 id="nextClassTitle">Schedule pending</h3>
+          <p id="nextClassInfo">
+            Your next class details will appear here.
+          </p>
+        </div>
+
+        <a id="joinBtn" class="btn btn-primary"
+           href="#" target="_blank" rel="noopener">
+          Join Now ↗
+        </a>
+      </div>
+
+      <div style="height:22px"></div>
+
+      <div class="card-heading">
+        <h2>Upcoming Classes</h2>
+        <small class="muted" id="upcomingCount">0 classes</small>
+      </div>
+
+      <div id="upcomingList">
+        <div class="empty">No classes scheduled yet.</div>
+      </div>
+    </section>
+
+    <section class="card col-4">
+      <div class="card-heading">
+        <h2>Learning Calendar</h2>
+        <div class="calendar-nav">
+          <button id="prevMonth">‹</button>
+          <strong id="monthLabel"></strong>
+          <button id="nextMonth">›</button>
+        </div>
+      </div>
+
+      <div id="calendar" class="calendar"></div>
+      <p class="muted">Highlighted dates indicate scheduled classes.</p>
+    </section>
+
+    <section class="card col-8">
+      <div class="card-heading">
+        <h2>Assignments & Resources</h2>
+        <small id="assignmentCount" class="muted">0 files</small>
+      </div>
+
+      <div id="assignmentList">
+        <div class="empty">
+          No assignments uploaded yet.
+        </div>
+      </div>
+    </section>
+
+    <section class="card col-4">
+      <div class="card-heading">
+        <h2>Your Trainer</h2>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="avatar">S</div>
+        <div>
+          <strong>Saksham</strong>
+          <div class="muted">Mathematics Trainer</div>
+        </div>
+      </div>
+
+      <p class="muted" style="line-height:1.7;margin-top:15px">
+        Personalised mathematics sessions aligned with
+        the US Common Core curriculum.
+      </p>
+
+      <a class="btn btn-secondary"
+         style="width:100%"
+         href="mailto:openedlabs@gmail.com?subject=Math%20Programme%20Support">
+        Contact Support
+      </a>
+    </section>
+
+    <section class="card col-12">
+      <div class="card-heading">
+        <h2>Trainer Availability</h2>
+        <small class="muted" id="timezoneLabel"></small>
+      </div>
+
+      <div id="availability" class="availability"></div>
+      <p class="muted">
+        Availability options are not confirmed class bookings.
+      </p>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    © <span id="year"></span>
+    Math · Powered by openEd Labs ·
+    <a href="https://math.eduspace.work/proposal.html">
+      Programme Proposal
+    </a>
+  </div>
+
+</main>
+
+<script>
+let CONFIG = null;
+let currentStudent = null;
+let calendarMonth = new Date();
+
+const $ = id => document.getElementById(id);
+
+const safe = value => String(value ?? "").replace(
+  /[&<>"']/g,
+  c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c])
+);
+
+const pad = n => String(n).padStart(2,"0");
+
+function dateKey(date) {
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`;
+}
+
+function formatDate(value) {
+  return new Date(value+"T12:00:00").toLocaleDateString(
+    "en-US",
+    {weekday:"short",month:"short",day:"numeric"}
+  );
+}
+
+async function loadConfig() {
+  const response = await fetch("dashboard-data.json", {
+    cache:"no-store"
+  });
+
+  if (!response.ok) {
+    throw new Error("Dashboard JSON not found");
+  }
+
+  CONFIG = await response.json();
+}
+
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const username = $("username").value.trim().toLowerCase();
+  const password = $("password").value;
+  const button = e.target.querySelector("button");
+
+  button.disabled = true;
+  $("loginError").textContent = "Checking login...";
+
+  try {
+    if (!CONFIG) await loadConfig();
+
+    const student = Object.values(CONFIG.students).find(s =>
+      String(s.username).toLowerCase() === username &&
+      s.password === password
+    );
+
+    if (!student) {
+      $("loginError").textContent =
+        "Incorrect username or password.";
+      return;
+    }
+
+    currentStudent = student;
+
+    $("loginView").classList.add("hidden");
+    $("dashboardView").classList.remove("hidden");
+    $("loginError").textContent = "";
+
+    renderDashboard();
+
+  } catch (error) {
+    $("loginError").textContent =
+      "Unable to load dashboard-data.json. Please check your files.";
+  } finally {
+    button.disabled = false;
+  }
+});
+
+$("logoutBtn").addEventListener("click", () => {
+  currentStudent = null;
+  $("password").value = "";
+  $("dashboardView").classList.add("hidden");
+  $("loginView").classList.remove("hidden");
+});
+
+$("prevMonth").addEventListener("click", () => {
+  calendarMonth.setMonth(calendarMonth.getMonth()-1);
+  renderCalendar();
+});
+
+$("nextMonth").addEventListener("click", () => {
+  calendarMonth.setMonth(calendarMonth.getMonth()+1);
+  renderCalendar();
+});
+
+function renderDashboard() {
+  $("welcomeTitle").textContent =
+    `Hello, ${currentStudent.name.split(" ")[0]}!`;
+
+  $("welcomeSubtitle").textContent =
+    `Your ${currentStudent.grade} mathematics learning space.`;
+
+  $("studentName").textContent = currentStudent.name;
+  $("studentGrade").textContent =
+    `${currentStudent.grade} · ${currentStudent.curriculum}`;
+
+  $("avatar").textContent =
+    currentStudent.grade.replace("Grade ","G");
+
+  $("year").textContent = new Date().getFullYear();
+
+  $("timezoneLabel").textContent =
+    CONFIG.site.timezoneLabel || "";
+
+  renderClasses();
+  renderAssignments();
+  renderCalendar();
+  renderAvailability();
+}
+
+function getUpcoming() {
+  const now = new Date();
+
+  return (currentStudent.schedule || [])
+    .filter(s => s.date)
+    .filter(s => new Date(`${s.date}T${s.start || "00:00"}:00`) > now)
+    .sort((a,b) =>
+      `${a.date}T${a.start || "00:00"}`.localeCompare(
+        `${b.date}T${b.start || "00:00"}`
+      )
+    );
+}
+
+function renderClasses() {
+  const upcoming = getUpcoming();
+
+  $("upcomingCount").textContent =
+    `${upcoming.length} scheduled`;
+
+  if (!upcoming.length) {
+    $("upcomingList").innerHTML =
+      '<div class="empty">No upcoming classes scheduled.</div>';
+
+    $("nextClassTitle").textContent =
+      "Your schedule is being finalised";
+
+    $("nextClassInfo").textContent =
+      "Confirmed class dates and timings will appear here.";
+
+    $("joinBtn").href = "#";
+    $("joinBtn").onclick = e => {
+      e.preventDefault();
+      alert("Your Google Meet link will be added soon.");
+    };
+    return;
+  }
+
+  $("upcomingList").innerHTML = upcoming.slice(0,7).map(s => {
+    const date = new Date(s.date+"T12:00:00");
+
+    return `
+      <div class="session">
+        <div class="datebox">
+          <strong>${date.getDate()}</strong>
+          <small>${date.toLocaleDateString("en-US",{month:"short"})}</small>
+        </div>
+
+        <div class="session-info">
+          <strong>${safe(s.title || "Mathematics Class")}</strong>
+          <small>
+            ${safe(formatDate(s.date))}
+            · ${safe(s.start || "Time TBC")}
+            – ${safe(s.end || "")}
+            ${safe(s.timezone || "")}
+          </small>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const next = upcoming[0];
+  const link = next.meetLink || CONFIG.defaultMeetLink || "";
+
+  $("nextClassTitle").textContent =
+    next.title || `${currentStudent.grade} Mathematics`;
+
+  $("nextClassInfo").textContent =
+    `${formatDate(next.date)} · ${next.start || "Time TBC"} – ${next.end || ""} ${next.timezone || ""}`;
+
+  $("joinBtn").href = link || "#";
+
+  $("joinBtn").onclick = e => {
+    if (!link) {
+      e.preventDefault();
+      alert("Google Meet link has not been added yet.");
+    }
+  };
+}
+
+function renderAssignments() {
+  const files = currentStudent.assignments || [];
+
+  $("assignmentCount").textContent =
+    `${files.length} files`;
+
+  if (!files.length) {
+    $("assignmentList").innerHTML =
+      '<div class="empty">No assignments uploaded yet.</div>';
+    return;
+  }
+
+  $("assignmentList").innerHTML = files.map(file => `
+    <div class="assignment">
+      <div class="file-icon">
+        ${safe(file.type || "FILE")}
+      </div>
+
+      <div class="file-info">
+        <strong>${safe(file.title)}</strong>
+        <small>
+          ${safe(file.description || "Learning resource")}
+          ${file.date ? " · " + safe(file.date) : ""}
+        </small>
+      </div>
+
+      <a class="download"
+         href="${safe(file.file)}"
+         download>
+         Download ↓
+      </a>
+    </div>
+  `).join("");
+}
+
+function renderCalendar() {
+  const year = calendarMonth.getFullYear();
+  const month = calendarMonth.getMonth();
+
+  $("monthLabel").textContent =
+    calendarMonth.toLocaleDateString("en-US",{
+      month:"short",
+      year:"numeric"
+    });
+
+  const first = new Date(year,month,1);
+  const start = (first.getDay()+6)%7;
+  const total = new Date(year,month+1,0).getDate();
+  const previousTotal = new Date(year,month,0).getDate();
+
+  const classDates = new Set(
+    (currentStudent.schedule || []).map(s => s.date)
+  );
+
+  const today = dateKey(new Date());
+
+  let output = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+    .map(day => `<div class="day-name">${day}</div>`)
+    .join("");
+
+  for (let i=0;i<42;i++) {
+    let day, date, other = false;
+
+    if (i < start) {
+      day = previousTotal-start+i+1;
+      date = new Date(year,month-1,day);
+      other = true;
+    } else if (i >= start+total) {
+      day = i-start-total+1;
+      date = new Date(year,month+1,day);
+      other = true;
+    } else {
+      day = i-start+1;
+      date = new Date(year,month,day);
+    }
+
+    const key = dateKey(date);
+    const hasClass = classDates.has(key);
+
+    output += `
+      <div class="day
+        ${other ? "other" : ""}
+        ${key===today ? "today" : ""}
+        ${hasClass ? "has-class" : ""}">
+        ${day}
+        ${hasClass ? '<span class="dot"></span>' : ""}
+      </div>
+    `;
+  }
+
+  $("calendar").innerHTML = output;
+}
+
+function renderAvailability() {
+  $("availability").innerHTML =
+    (CONFIG.availability || []).map(slot => `
+      <div class="slot">
+        <strong>${safe(slot.day)} · ${safe(slot.time)}</strong>
+        <small>● ${safe(slot.status || "Available")}</small>
+      </div>
+    `).join("");
+}
+</script>
+
+</body>
+</html>
+

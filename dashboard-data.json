@@ -1,0 +1,125 @@
+
+{
+  "site": {
+    "name": "Math Student Portal",
+    "brand": "Math",
+    "poweredBy": "openEd Labs",
+    "proposalUrl": "https://math.eduspace.work/proposal.html",
+    "supportEmail": "openedlabs@gmail.com",
+    "timezone": "America/New_York",
+    "timezoneLabel": "EST"
+  },
+
+  "defaultMeetLink": "https://meet.google.com/kzd-vcjc-jxd",
+
+  "students": {
+    "grade6": {
+      "username": "Jainesh",
+      "password": "Jainesh@123",
+      "name": "Jainesh",
+      "grade": "Grade 6",
+      "curriculum": "US Common Core Mathematics",
+
+      "schedule": [
+        {
+          "date": "2026-11-16",
+          "start": "05:00",
+          "end": "06:00",
+          "timezone": "EST",
+          "title": "Grade 6 Mathematics",
+          "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+        }
+      ],
+
+      "assignments": [
+        {
+          "title": "Percentage Practice",
+          "description": "Percentage Practice Worksheet",
+          "file": "assignments/grade6/Percentage_Word Problems.pdf",
+          "date": "2026-11-09",
+          "type": "PDF"
+        }
+      ]
+    },
+
+    "grade8": {
+      "username": "Dhriti",
+      "password": "Dhriti@123",
+      "name": "Dhriti",
+      "grade": "Grade 8",
+      "curriculum": "US Common Core Mathematics",
+
+      "schedule": [
+
+        {
+          "date": "2026-11-16",
+          "start": "05:00",
+          "end": "06:00",
+          "timezone": "EST",
+          "title": "Grade 8 Mathematics",
+          "meetLink": "https://meet.google.com/kzd-vcjc-jxd"
+        }
+
+        ],
+
+      "assignments": [
+                    {
+          "title": "Unit 3 Scatter Plots & Associations",
+          "description": "Scatter Plots & Associations Worksheet",
+          "file": "assignments/grade8/Unit 3 Practice Test - Scatter Plots & Associations.pdf",
+          "date": "2026-11-11",
+          "type": "PDF"
+        }
+    ]
+    }
+  },
+
+"availability": [
+  {
+    "day": "Monday",
+    "time": "5:00 AM - 6:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Tuesday",
+    "time": "4:00 AM - 5:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Tuesday",
+    "time": "5:00 AM - 6:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Wednesday",
+    "time": "5:00 AM - 6:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Wednesday",
+    "time": "6:00 AM - 7:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Thursday",
+    "time": "4:00 AM - 5:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Thursday",
+    "time": "5:00 AM - 6:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Friday",
+    "time": "5:00 AM - 6:00 AM EST",
+    "status": "Available"
+  },
+  {
+    "day": "Friday",
+    "time": "6:00 AM - 7:00 AM EST",
+    "status": "Available"
+  }
+]
+}
+
